@@ -1,4 +1,4 @@
-const { ADDRESS } = require("../constants/address")
+const { ADDRESS } = require("../constants/canaryAddress")
 const fetch = require("cross-fetch")
 
 

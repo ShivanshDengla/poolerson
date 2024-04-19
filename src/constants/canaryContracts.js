@@ -1,6 +1,6 @@
 const ethers = require("ethers");
-const { ABI } = require("./abi.js");
-const { ADDRESS, ADDRESS_AUCTION } = require("./address.js");
+const { ABI } = require("./canaryAbi.js");
+const { ADDRESS } = require("./canaryAddress.js");
 const { PROVIDERS } = require("./providers.js");
 // const { CONFIG } = require("./config.js");
 
@@ -72,50 +72,37 @@ const CONTRACTS = {
       ABI.RNGRELAYAUCTION,
       PROVIDERS[CONFIG.CHAINNAME]
     ),
-  },
-  RNGAUCTION: {
-    MAINNET: new ethers.Contract(
-      ADDRESS_AUCTION.MAINNET.RNGAUCTION,
-      ABI.RNGAUCTION,
-      PROVIDERS["MAINNET"]
-    ),
-  },
-  CHAINLINKDIRECTAUCTIONHELPER: {
-    MAINNET: new ethers.Contract(
-      ADDRESS_AUCTION.MAINNET.CHAINLINKDIRECTAUCTIONHELPER,
-      ABI.CHAINLINKDIRECTAUCTIONHELPER,
-      PROVIDERS["MAINNET"]
-    ),
-  },
+  }
 };
 
 module.exports = { CONTRACTS };
 
 
-async function isProviderConnected(provider) {
-  try {
-    // Perform a basic network operation - getting the latest block number
-    const blockNumber = await provider.getBlockNumber();
-    console.log(`Current block number: ${blockNumber}`);
-    return true;
-  } catch (error) {
-    console.error(`Error checking provider connectivity: ${error.message}`);
-    return false;
-  }
-}
+// TESTS
+// async function isProviderConnected(provider) {
+//   try {
+//     // Perform a basic network operation - getting the latest block number
+//     const blockNumber = await provider.getBlockNumber();
+//     console.log(`Current block number: ${blockNumber}`);
+//     return true;
+//   } catch (error) {
+//     console.error(`Error checking provider connectivity: ${error.message}`);
+//     return false;
+//   }
+// }
 
-async function getTotalAssetsOfFirstVault() {
-  try {
-    // Assuming CONTRACTS.VAULTS[CONFIG.CHAINNAME][0] is defined and has a VAULT property.
-    const vaultContractInstance = CONTRACTS.VAULTS[CONFIG.CHAINNAME][0].VAULT;
-    const totalAssets = await vaultContractInstance.totalAssets();
-    console.log(`Total assets: ${totalAssets.toString()}`);
-  } catch (error) {
-    console.error(`Error getting total assets from the first vault: ${error.message}`);
-  }
-}
+// async function getTotalAssetsOfFirstVault() {
+//   try {
+//     // Assuming CONTRACTS.VAULTS[CONFIG.CHAINNAME][0] is defined and has a VAULT property.
+//     const vaultContractInstance = CONTRACTS.VAULTS[CONFIG.CHAINNAME][0].VAULT;
+//     const totalAssets = await vaultContractInstance.totalAssets();
+//     console.log(`Total assets: ${totalAssets.toString()}`);
+//   } catch (error) {
+//     console.error(`Error getting total assets from the first vault: ${error.message}`);
+//   }
+// }
 
-getTotalAssetsOfFirstVault();
+// getTotalAssetsOfFirstVault();
 
 
-isProviderConnected(PROVIDERS["OPTIMISM"])
+// isProviderConnected(PROVIDERS["OPTIMISM"])

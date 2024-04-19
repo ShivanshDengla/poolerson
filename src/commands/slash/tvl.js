@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Emoji } = require("../../constants/emoji.js");
 
-const { GetVaultTvl } = require("../../functions/getVaultTvl.js")
+const { GetCanaryVaultTvl } = require("../../functions/getCanaryVaultTvl.js")
 const { V4ADDRESS } = require("../../constants/v4addresses.js");
 const { V4CONTRACTS } = require("../../constants/v4contracts.js");
 console.log("emoji",Emoji("usdc"))
@@ -90,7 +90,7 @@ module.exports = {
       }  
       // v5
       else {
-        const tvl = await GetVaultTvl("OPTIMISM")
+        const tvl = await GetCanaryVaultTvl("OPTIMISM")
         console.log("v5 tvl",tvl)
 
 

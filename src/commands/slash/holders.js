@@ -4,7 +4,7 @@ const {Emoji} = require("../../constants/emoji.js")
 const { EmbedBuilder } = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
-const { V4CONTRACTS } = require("../../constants/contracts.js")
+const { V4CONTRACTS } = require("../../constants/canaryContracts.js")
 const fetch = require("node-fetch")
 
 async function pool(amount) {

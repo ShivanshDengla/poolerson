@@ -1,10 +1,10 @@
-const { Multicall } = require("../utilities/multicall");
-const { CONTRACTS } = require("../constants/contracts");
-const { ADDRESS } = require("../constants/address");
+const { Multicall } = require("../utilities/multicall.js");
+const { CONTRACTS } = require("../constants/canaryContracts.js");
+const { ADDRESS } = require("../constants/canaryAddress.js");
 const { FetchPricesForChain } = require("./tokenPrices.js");
 const { ethers } = require("ethers");
 
-async function GetVaultTvl(chain) {
+async function GetCanaryVaultTvl(chain) {
   try {
     const denomination = "usd"; // Replace with your preferred denomination.
     let calls = [];
@@ -56,7 +56,7 @@ async function GetVaultTvl(chain) {
   }
 }
 
-module.exports = { GetVaultTvl };
+module.exports = { GetCanaryVaultTvl };
 
 // Call the function for testing
-GetVaultTvl("OPTIMISM").then((results) => console.log(results)).catch((error) => console.error(error));
+// GetCanaryVaultTvl("OPTIMISM").then((results) => console.log(results)).catch((error) => console.error(error));
