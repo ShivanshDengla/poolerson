@@ -6,6 +6,9 @@ const trophyEmoji = "780567510915219476";
 const opEmoji = "989110966543343616";
 const poolEmoji = "819015792480747520";
 const parrotEmoji = "789986418356387870";
+const arbEmoji = "1227915853216092201"
+const baseEmoji = "1227915855057129523"
+
 function Emoji(name) {
   let emojiString = "";
   if (name === "polygon" || name.toString() === "3") {
@@ -33,6 +36,13 @@ function Emoji(name) {
   if (name === "poolyAttention") {
     emojiString = "<:Parrot:" + parrotEmoji + ">";
   }
+  if (name === "arbitrum") {
+    emojiString = "<:arb:" + arbEmoji + ">";
+  }
+  if (name === "base") {
+    emojiString = "<:base:" + baseEmoji + ">";
+  }
+  
 
   return emojiString;
 };

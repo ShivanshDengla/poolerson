@@ -12,20 +12,31 @@ return amount / 1e18;
 } 
 async function holders(threshold = 0) {
     try{
-    let [polygonHolders, ethereumHolders, optimismHolders] =
+    let [polygonHolders, ethereumHolders, optimismHolders, arbitrumHolders, baseHolders] =
       await Promise.all([
         fetch("https://poolexplorer.xyz/holders137"),
         fetch("https://poolexplorer.xyz/holders1"),
-        fetch("https://poolexplorer.xyz/holders10")
+        fetch("https://poolexplorer.xyz/holders10"),
+        fetch("https://poolexplorer.xyz/holders42161"),
+        fetch("https://poolexplorer.xyz/holders8453")
+
       ]);
 let amountThreshold = 0
 
-polygonHolders = await polygonHolders.json()
-ethereumHolders = await ethereumHolders.json()
-optimismHolders = await optimismHolders.json()
+[polygonHolders, ethereumHolders, optimismHolders, arbitrumHolders, baseHolders] =
+await Promise.all([polygonHolders.json(),
+ ethereumHolders.json(),
+optimismHolders.json(),
+arbitrumHolders.json(),
+baseHolders.json()])
+
+
 polygonHolders = polygonHolders.data.items
 ethereumHolders = ethereumHolders.data.items
 optimismHolders = optimismHolders.data.items
+arbitrumHolders = arbitrumHolders.data.items
+baseHolders = baseHolders.data.items
+
 if(threshold > 0){
 polygonHolders = polygonHolders.filter(function isThreshold(num) {
   return (num.balance / 1e18 ) >= threshold;
@@ -36,11 +47,20 @@ ethereumHolders = ethereumHolders.filter(function isThreshold(num) {
 optimismHolders = optimismHolders.filter(function isThreshold(num) {
   return (num.balance / 1e18 ) >= threshold;
 })
+arbitrumHolders = arbitrumHolders.filter(function isThreshold(num) {
+  return (num.balance / 1e18 ) >= threshold;
+})
+baseHolders = baseHolders.filter(function isThreshold(num) {
+  return (num.balance / 1e18 ) >= threshold;
+})
 
 }
 let thresholdString = threshold > 0 ? " >= " + parseFloat(threshold).toFixed(0) : ""
    let bigList = polygonHolders.concat(ethereumHolders)
    bigList = bigList.concat(optimismHolders)
+   bigList = bigList.concat(arbitrumHolders)
+   bigList = bigList.concat(baseHolders)
+
 let uniqueObjArray = [
     ...new Map(bigList.map((item) => [item["address"], item])).values(),
 ];
@@ -62,7 +82,15 @@ Emoji("poolyAttention") + " ")
         Emoji("optimism") +
         " Optimism " +
         Commas(optimismHolders.length) +
-"\n" + "\n" +
+"\n" +
+Emoji("arbitrum") +
+        " Arbitrum " +
+        Commas(arbitrumHolders.length) +
+        Emoji("base") +
+        " Base " +
+        Commas(baseHolders.length) +
+
+"\n" +
         Emoji("pool") +
         " Unique " +
         Commas(uniqueObjArray.length)
