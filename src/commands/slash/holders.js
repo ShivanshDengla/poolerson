@@ -12,24 +12,20 @@ return amount / 1e18;
 } 
 async function holders(threshold = 0) {
     try{
-    let [polygonHolders, ethereumHolders, optimismHolders, arbitrumHolders, baseHolders] =
-      await Promise.all([
-        fetch("https://poolexplorer.xyz/holders137"),
-        fetch("https://poolexplorer.xyz/holders1"),
-        fetch("https://poolexplorer.xyz/holders10"),
-        fetch("https://poolexplorer.xyz/holders42161"),
-        fetch("https://poolexplorer.xyz/holders8453")
+let responses = await Promise.all([
+            fetch("https://poolexplorer.xyz/holders-137"),
+            fetch("https://poolexplorer.xyz/holders-1"),
+            fetch("https://poolexplorer.xyz/holders-10"),
+            fetch("https://poolexplorer.xyz/holders-42161"),
+            fetch("https://poolexplorer.xyz/holders-8453")
+        ]);
 
-      ]);
-let amountThreshold = 0
-
-[polygonHolders, ethereumHolders, optimismHolders, arbitrumHolders, baseHolders] =
-await Promise.all([polygonHolders.json(),
- ethereumHolders.json(),
-optimismHolders.json(),
-arbitrumHolders.json(),
-baseHolders.json()])
-
+let [polygonHolders, ethereumHolders, optimismHolders, arbitrumHolders, baseHolders] = await Promise.all(responses.map(async (response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        }));
 
 polygonHolders = polygonHolders.data.items
 ethereumHolders = ethereumHolders.data.items
@@ -86,11 +82,12 @@ Emoji("poolyAttention") + " ")
 Emoji("arbitrum") +
         " Arbitrum " +
         Commas(arbitrumHolders.length) +
+"\n" +
         Emoji("base") +
         " Base " +
         Commas(baseHolders.length) +
 
-"\n" +
+"\n" + "\n" +
         Emoji("pool") +
         " Unique " +
         Commas(uniqueObjArray.length)
