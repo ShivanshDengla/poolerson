@@ -3,7 +3,9 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Emoji } = require("../../constants/emoji.js");
 
 const { GetCanaryVaultTvl } = require("../../functions/getCanaryVaultTvl.js")
+const { GetToucanVaultTvl } = require("../../functions/getToucanVaultTvl.js")
 const { V4ADDRESS } = require("../../constants/v4addresses.js");
+
 const { V4CONTRACTS } = require("../../constants/v4contracts.js");
 console.log("emoji",Emoji("usdc"))
 // const { MessageEmbed } = require("discord.js");
@@ -74,7 +76,7 @@ module.exports = {
       option
         .setName("version")
         .setDescription("Choose asset for coverage request")
-        .addChoices({ name: "v4", value: "v4" }, { name: "v5", value: "v5" })
+        .addChoices({ name: "v4", value: "v4" }, { name: "canary", value: "canary" }, {name:"v5",value:"toucan"})
         .setRequired(false)
     ),
   run: async (client, interaction) => {
@@ -90,9 +92,13 @@ module.exports = {
       }  
       // v5
       else {
-        const tvl = await GetCanaryVaultTvl("OPTIMISM")
-        console.log("v5 tvl",tvl)
 
+let tvl 
+if (version ==="canary") {
+       tvl = await GetCanaryVaultTvl("OPTIMISM")}
+else{ tvl = await GetToucanVaultTvl("OPTIMISM")}
+
+        console.log("v5 tvl",tvl)
 
 
 // Calculate the TVL
