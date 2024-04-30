@@ -94,10 +94,15 @@ module.exports = {
       else {
 
 let tvl 
+let titleText
 if (version ==="canary") {
-       tvl = await GetCanaryVaultTvl("OPTIMISM")}
-else{ tvl = await GetToucanVaultTvl("OPTIMISM")}
-
+       tvl = await GetCanaryVaultTvl("OPTIMISM")
+       titleText = "Canary"}
+else{ 
+tvl = await GetToucanVaultTvl("OPTIMISM")
+titleText = "V5"
+}
+console.log("title text",titleText)
         console.log("v5 tvl",tvl)
 
 
@@ -114,7 +119,7 @@ let topVaults = sortedVaults
 // Create the embed.
 let tvlEmbed = new EmbedBuilder()
   .setColor("#0099ff")
-  .setTitle(Emoji("optimism") + " V5 TVL $"+totalTVL.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+  .setTitle(Emoji("optimism") + " " + titleText + " TVL $"+totalTVL.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
   // .setDescription(`TVL $${}`)
   // For each of the top vaults, add a field to the embed, excluding those with a value of zero.
   .addFields(topVaults.map(vault => {
