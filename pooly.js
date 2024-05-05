@@ -8,6 +8,9 @@ const moment = require("moment");
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 
+require('./liquidationEvents.js');
+require('./valutEvents.js');
+
 const dotenv = require("dotenv");
 dotenv.config();
 
