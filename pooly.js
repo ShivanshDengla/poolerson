@@ -8,8 +8,8 @@ const moment = require("moment");
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 
-require('./liquidationEvents.js');
-require('./valutEvents.js');
+const liquidationEvent = require('./liquidationEvents.js');
+const vaultEvent = require('./vaultEvents.js');
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -66,6 +66,10 @@ readdirSync('./src/events').forEach(async file => {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 })
+
+liquidationEvent(client);
+vaultEvent(client);
+
 
 //nodejs-listeners
 process.on("unhandledRejection", e => { 

@@ -1,27 +1,18 @@
-const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
-const { ethers } = require("ethers");
-const { ADDRESS } = require("./src/constants/toucanAddress.js");
-const { ABI } = require("./src/constants/toucanAbi.js");
-const { sendMessageToDiscord } = require("./sendMessages.js");
-const moment = require("moment");
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.MessageContent], shards: "auto", partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember]});
-
-const optimismProvider = new ethers.providers.JsonRpcProvider("https://mainnet.optimism.io");
-const liquidationPairFactoryAddress = ADDRESS.OPTIMISM.LIQUIDATIONPAIRFACTORY;
-const liquidationPairFactoryAbi = ABI.LIQUIDATIONPAIRFACTORY;
-
-const liquidationPairFactoryContract = new ethers.Contract(
-    liquidationPairFactoryAddress,
-    liquidationPairFactoryAbi,
-    optimismProvider
-);
-
-const log = x => { console.log(`[${moment().format("DD-MM-YYYY HH:mm:ss")}] ${x}`) };
-
-client.on("ready", async () => {
-    log(`${client.user.username} Aktif Edildi!`);
-});
+async function liquidationEvent(client) {
+    const { ethers } = require("ethers");
+    const { ADDRESS } = require("./src/constants/toucanAddress.js");
+    const { ABI } = require("./src/constants/toucanAbi.js");
+    const { sendMessageToDiscord } = require("./sendMessages.js");
+    
+    const optimismProvider = new ethers.providers.JsonRpcProvider("https://mainnet.optimism.io");
+    const liquidationPairFactoryAddress = ADDRESS.OPTIMISM.LIQUIDATIONPAIRFACTORY;
+    const liquidationPairFactoryAbi = ABI.LIQUIDATIONPAIRFACTORY;
+    
+    const liquidationPairFactoryContract = new ethers.Contract(
+        liquidationPairFactoryAddress,
+        liquidationPairFactoryAbi,
+        optimismProvider
+    );
 
 liquidationPairFactoryContract.on("*", async (eventName, event) => {
     console.log("Event:", eventName);
@@ -43,10 +34,6 @@ liquidationPairFactoryContract.on("*", async (eventName, event) => {
 
     sendMessageToDiscord(client, txHash, etherscanLink, tokenIn, tokenOut, sender);
 });
+}
 
-const dotenv = require("dotenv");
-dotenv.config();
-
-let token = process.env.BOT_KEY;
-
-client.login(token);
+module.exports = liquidationEvent;
