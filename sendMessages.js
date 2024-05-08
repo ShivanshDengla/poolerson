@@ -1,12 +1,15 @@
 const { EmbedBuilder } = require("discord.js");
 const { Emoji } = require("./src/constants/emoji.js");
+const { DISCORDADDRESS } = require("./src/constants/discordAddress.js");
+const { PROVIDERS } = require("./src/constants/providers.js")
+const { ethers } = require("ethers");
 
-async function sendMessageToDiscord(client, txHash, etherscanLink, tokenIn, tokenOut, sender) {
+
+async function sendMessageToDiscord(client, etherscanLink, sender, tokenOutName) {
     try {
-        const channelId = '1225048554708406282';
+        const channelId = DISCORDADDRESS.POOLTIME;
         const channel = await client.channels.fetch(channelId);
         const senderLink = `https://etherscan.io/address/${sender}`;
-        const tokenOutName = await getTokenName(tokenOut);
 
         // Constructing the embed
         let liquidationEmbed = new EmbedBuilder()
@@ -28,9 +31,9 @@ async function sendMessageToDiscord(client, txHash, etherscanLink, tokenIn, toke
     }
 }
 
-async function sendVaultToDiscord(client, txHash, name, etherscanLink, sender, address) {
+async function sendVaultToDiscord(client, name, etherscanLink, sender, address) {
     try {
-        const channelId = '1225048554708406282';
+        const channelId = DISCORDADDRESS.POOLTIME;
         const channel = await client.channels.fetch(channelId);
         const senderLink = `https://etherscan.io/address/${sender}`;
         const pooltimeLink = `https://www.pooltime.app/vaults?chain=10&address=${address}`;
@@ -53,41 +56,6 @@ async function sendVaultToDiscord(client, txHash, name, etherscanLink, sender, a
         console.log("Embed sent to Discord successfully");
     } catch (error) {
         console.log("error generating vault embed", error);
-    }
-}
-
-async function getTokenName(tokenAddress) {
-    try {
-        // Connect to an Ethereum node
-        const provider = PROVIDERS.SEPOLIA;
-
-        // Create a contract instance for the ERC20 token
-        const abi = [
-            {
-                "constant": true,
-                "inputs": [],
-                "name": "name",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
-
-        const contract = new ethers.Contract(tokenAddress, abi, provider);
-
-        // Call the name() function of the ERC20 token contract
-        const name = await contract.name();
-
-        return name;
-    } catch (error) {
-        console.error('Error getting token name:', error);
-        return "Unknown Token";
     }
 }
 

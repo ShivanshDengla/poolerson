@@ -1,11 +1,12 @@
-async function vaultEvent(client) {
+async function vaultEvent(client, chainName) {
     const { ethers } = require("ethers");
     const { ADDRESS } = require("./src/constants/toucanAddress.js");
     const { ABI } = require("./src/constants/toucanAbi.js");
     const { sendVaultToDiscord } = require("./sendMessages.js");
+    const { PROVIDERS } = require("./src/constants/providers.js")
 
-    const optimismProvider = new ethers.providers.JsonRpcProvider("https://mainnet.optimism.io");
-    const newVaultAddress = ADDRESS.OPTIMISM.VAULTFACTORY;
+    const optimismProvider = PROVIDERS[chainName];
+    const newVaultAddress = ADDRESS[chainName].VAULTFACTORY;
     const newVaultAbi = ABI.VAULTFACTORY;
 
     const newVaultContract = new ethers.Contract(newVaultAddress, newVaultAbi, optimismProvider);
@@ -33,7 +34,7 @@ newVaultContract.on("*", async (vaultName) => {
         console.log("Address: ", vaultName.address);
 
         // Send message to Discord
-        sendVaultToDiscord(client, txHash, name, etherscanLink, sender, address);
+        sendVaultToDiscord(client, name, etherscanLink, sender, address);
     } catch (error) {
         console.error("Error handling NewVaultCreated event:", error);
     }

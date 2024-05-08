@@ -1,11 +1,12 @@
-async function liquidationEvent(client) {
+async function liquidationEvent(client, chainName) {
     const { ethers } = require("ethers");
     const { ADDRESS } = require("./src/constants/toucanAddress.js");
     const { ABI } = require("./src/constants/toucanAbi.js");
     const { sendMessageToDiscord } = require("./sendMessages.js");
-    
-    const optimismProvider = new ethers.providers.JsonRpcProvider("https://mainnet.optimism.io");
-    const liquidationPairFactoryAddress = ADDRESS.OPTIMISM.LIQUIDATIONPAIRFACTORY;
+    const { PROVIDERS } = require("./src/constants/providers.js")
+
+    const optimismProvider = PROVIDERS[chainName];
+    const liquidationPairFactoryAddress = ADDRESS[chainName].LIQUIDATIONPAIRFACTORY;
     const liquidationPairFactoryAbi = ABI.LIQUIDATIONPAIRFACTORY;
     
     const liquidationPairFactoryContract = new ethers.Contract(
@@ -32,8 +33,46 @@ liquidationPairFactoryContract.on("*", async (eventName, event) => {
     const sender = transaction.from;
     console.log("Sender:", sender);
 
-    sendMessageToDiscord(client, txHash, etherscanLink, tokenIn, tokenOut, sender);
+    const tokenOutName = await getTokenName(tokenOut);
+
+    sendMessageToDiscord(client, etherscanLink, sender, tokenOutName);
 });
+
+async function getTokenName(tokenAddress) {
+    try {
+        // Connect to an Ethereum node
+        const provider = PROVIDERS[chainName];
+
+        // Create a contract instance for the ERC20 token
+        const abi = [
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "name",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        const contract = new ethers.Contract(tokenAddress, abi, provider);
+
+        // Call the name() function of the ERC20 token contract
+        const name = await contract.name();
+
+        return name;
+    } catch (error) {
+        console.error('Error getting token name:', error);
+        return "Unknown Token";
+    }
+}
+
 }
 
 module.exports = liquidationEvent;
