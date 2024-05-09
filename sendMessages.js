@@ -7,7 +7,7 @@ const { ethers } = require("ethers");
 
 async function sendMessageToDiscord(client, etherscanLink, sender, tokenOutName) {
     try {
-        const channelId = DISCORDADDRESS.POOLTIME;
+        const channelId = DISCORDADDRESS.POOLTOGETHER;
         const channel = await client.channels.fetch(channelId);
         const senderLink = `https://etherscan.io/address/${sender}`;
 
@@ -33,7 +33,7 @@ async function sendMessageToDiscord(client, etherscanLink, sender, tokenOutName)
 
 async function sendVaultToDiscord(client, name, etherscanLink, sender, address) {
     try {
-        const channelId = DISCORDADDRESS.POOLTIME;
+        const channelId = DISCORDADDRESS.POOLTOGETHER;
         const channel = await client.channels.fetch(channelId);
         const senderLink = `https://etherscan.io/address/${sender}`;
         const pooltimeLink = `https://www.pooltime.app/vaults?chain=10&address=${address}`;
