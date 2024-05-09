@@ -7,6 +7,11 @@ const { readdirSync } = require("fs")
 const moment = require("moment");
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
+const { ADDRESS } = require('./src/constants/toucanAddress.js');
+
+const liquidationEvent = require('./liquidationEvents.js');
+const vaultEvent = require('./vaultEvents.js');
+
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -63,6 +68,14 @@ readdirSync('./src/events').forEach(async file => {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 })
+
+const chainNames = Object.keys(ADDRESS);
+
+chainNames.forEach(chain => {
+  liquidationEvent(client, chain);
+  vaultEvent(client, chain);
+});
+
 
 //nodejs-listeners
 process.on("unhandledRejection", e => { 

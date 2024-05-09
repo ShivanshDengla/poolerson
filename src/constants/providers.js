@@ -11,6 +11,8 @@ const opGoerliEndpoint = "https://opt-goerli.g.alchemy.com/v2/" + process.env.AL
 const opEndpoint =  "https://opt-mainnet.g.alchemy.com/v2/" + process.env.ALCHEMY_KEY
 const mainnetEndpoint = "https://eth-mainnet.g.alchemy.com/v2/" + process.env.ALCHEMY_KEY
 const ws_opEndpoint = "wss://opt-mainnet.g.alchemy.com/v2/" +  process.env.ALCHEMY_KEY
+const opsepolia_http = "https://sepolia.optimism.io"
+const op_http = "https://mainnet.optimism.io"
 
 
 // for v4
@@ -34,7 +36,9 @@ const PROVIDERS = {
     MUMBAI: new ethers.providers.JsonRpcProvider(mumbaiEndpoint),
     SEPOLIA: new ethers.providers.JsonRpcProvider(sepoliaEndpoint),
     OPGOERLI: new ethers.providers.JsonRpcProvider(opGoerliEndpoint),
-    OPTIMISM: new ethers.providers.JsonRpcProvider(opEndpoint),
+    //OPTIMISM: new ethers.providers.JsonRpcProvider(opEndpoint),   //uncomment when we figure out websockets
+    OPTIMISM: new ethers.providers.JsonRpcProvider(op_http),
+    OPTIMISMSEPOLIA: new ethers.providers.JsonRpcProvider(opsepolia_http),
     POLYGON: new ethers.providers.JsonRpcProvider(polygonEndpoint),
     AVALANCHE: new ethers.providers.JsonRpcProvider(avalancheEndpoint)
 
