@@ -5,14 +5,14 @@ async function liquidationEvent(client, chainName) {
     const { sendMessageToDiscord } = require("./sendMessages.js");
     const { PROVIDERS } = require("./src/constants/providers.js")
 
-    const optimismProvider = PROVIDERS[chainName];
+    const provider = PROVIDERS[chainName];
     const liquidationPairFactoryAddress = ADDRESS[chainName].LIQUIDATIONPAIRFACTORY;
     const liquidationPairFactoryAbi = ABI.LIQUIDATIONPAIRFACTORY;
     
     const liquidationPairFactoryContract = new ethers.Contract(
         liquidationPairFactoryAddress,
         liquidationPairFactoryAbi,
-        optimismProvider
+        provider
     );
 
 liquidationPairFactoryContract.on("*", async (eventName, event) => {
@@ -26,16 +26,16 @@ liquidationPairFactoryContract.on("*", async (eventName, event) => {
     const tokenOut = eventName.args[1];
     console.log("Token Out: ", eventName.args[1]);
 
-    const etherscanLink = `https://optimistic.etherscan.io/tx/${txHash}`;
+    const etherscanLink = `${ADDRESS[chainName].ETHERSCAN}/tx/${txHash}`;
     console.log("Etherscan Link:", etherscanLink);
 
-    const transaction = await optimismProvider.getTransaction(txHash);
+    const transaction = await provider.getTransaction(txHash);
     const sender = transaction.from;
     console.log("Sender:", sender);
 
     const tokenOutName = await getTokenName(tokenOut);
 
-    sendMessageToDiscord(client, etherscanLink, sender, tokenOutName);
+    sendMessageToDiscord(client, etherscanLink, sender, tokenOutName, chainName);
 });
 
 async function getTokenName(tokenAddress) {

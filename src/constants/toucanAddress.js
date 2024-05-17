@@ -1,7 +1,13 @@
 
 
 const ADDRESS = {
+BASE: {
+  ETHERSCAN: 'https://basescan.org',
+  VAULTFACTORY: '0xe32f6344875494ca3643198d87524519dc396ddf',
+  LIQUIDATIONPAIRFACTORY: '0x8557a9a33b573dc4403708c5a8746a52648374ea',
+},
 OPTIMISM: {
+ ETHERSCAN: 'https://optimistic.etherscan.io',
  PRIZEPOOLSUBGRAPH: 'https://api.studio.thegraph.com/proxy/63100/pt-v5-optimism/version/latest/',
   PRIZETOKEN: {
     ADDRESS: "0x4200000000000000000000000000000000000006",
@@ -104,7 +110,7 @@ NOVAULT: true,
 },
 OPTIMISMSEPOLIA: {
 
- 
+   ETHERSCAN: 'https://sepolia-optimism.etherscan.io/',
    VAULTFACTORY: '0x5eCC83B1A0bA255713b69154451826a937702435',
 
    LIQUIDATIONPAIRFACTORY: '0x99e05e2346885D1c1Ce714c9e794A7ca6E3634b4',

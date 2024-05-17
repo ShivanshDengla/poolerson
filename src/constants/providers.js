@@ -13,7 +13,7 @@ const mainnetEndpoint = "https://eth-mainnet.g.alchemy.com/v2/" + process.env.AL
 const ws_opEndpoint = "wss://opt-mainnet.g.alchemy.com/v2/" +  process.env.ALCHEMY_KEY
 const opsepolia_http = "https://sepolia.optimism.io"
 const op_http = "https://mainnet.optimism.io"
-
+const baseMainnet = "https://base-mainnet.g.alchemy.com/v2/" + process.env.ALCHEMY_KEY
 
 // for v4
 const polygonEndpoint = "https://polygon-mainnet.g.alchemy.com/v2/" + process.env.ALCHEMY_KEY;
@@ -40,8 +40,8 @@ const PROVIDERS = {
     OPTIMISM: new ethers.providers.JsonRpcProvider(op_http),
     OPTIMISMSEPOLIA: new ethers.providers.JsonRpcProvider(opsepolia_http),
     POLYGON: new ethers.providers.JsonRpcProvider(polygonEndpoint),
-    AVALANCHE: new ethers.providers.JsonRpcProvider(avalancheEndpoint)
-
+    AVALANCHE: new ethers.providers.JsonRpcProvider(avalancheEndpoint),
+    BASE: new ethers.providers.JsonRpcProvider(baseMainnet)
 
     // POLYGON: new ethers.providers.JsonRpcProvider(polygonEndpoint),
     // AVALANCHE: new ethers.providers.JsonRpcProvider(

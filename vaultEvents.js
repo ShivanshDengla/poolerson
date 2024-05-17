@@ -5,11 +5,11 @@ async function vaultEvent(client, chainName) {
     const { sendVaultToDiscord } = require("./sendMessages.js");
     const { PROVIDERS } = require("./src/constants/providers.js")
 
-    const optimismProvider = PROVIDERS[chainName];
+    const provider = PROVIDERS[chainName];
     const newVaultAddress = ADDRESS[chainName].VAULTFACTORY;
     const newVaultAbi = ABI.VAULTFACTORY;
 
-    const newVaultContract = new ethers.Contract(newVaultAddress, newVaultAbi, optimismProvider);
+    const newVaultContract = new ethers.Contract(newVaultAddress, newVaultAbi, provider);
 
 
 newVaultContract.on("*", async (vaultName) => {
@@ -23,18 +23,18 @@ newVaultContract.on("*", async (vaultName) => {
         const name = vaultName.args[3];
         console.log("Vault Name: ", vaultName.args[3]);
 
-        const etherscanLink = `https://optimistic.etherscan.io/tx/${txHash}`;
+        const etherscanLink = `${ADDRESS[chainName].ETHERSCAN}/tx/${txHash}`;
         console.log("Etherscan Link:", etherscanLink);
 
         const transaction = await optimismProvider.getTransaction(txHash);
         const sender = transaction.from;
         console.log("Created By:", sender);
 
-        const address = vaultName.address;
+        const address = vaultName.args[0];
         console.log("Address: ", vaultName.address);
 
         // Send message to Discord
-        sendVaultToDiscord(client, name, etherscanLink, sender, address);
+        sendVaultToDiscord(client, name, etherscanLink, sender, address, chainName);
     } catch (error) {
         console.error("Error handling NewVaultCreated event:", error);
     }
